@@ -1,34 +1,21 @@
-CXX = g++ -g -Wall -pedantic -std=c++11
-MAIN_BINARIES = $(basename $(wildcard *Main.cpp))
-TEST_BINARIES = $(basename $(wildcard *Test.cpp))
-HEADERS = $(wildcard *.h)
-OBJECTS = $(addsuffix .o, $(basename $(filter-out %Main.cpp %Test.cpp, $(wildcard *.cpp))))
-LIBRARIES =
+PYTHON = python
+CHECKSTYLE = flake8
+TEST_BINARIES = $(wildcard *Test.py)
 
-.PRECIOUS: %.o
-.SUFFIXES:
-.PHONY: all compile test checkstyle
+all: compile test checkstyle run
 
-all: compile test checkstyle
-
-compile: $(MAIN_BINARIES) $(TEST_BINARIES)
+compile:
+	@echo "Nothing to compile for Python :-)"
 
 test: $(TEST_BINARIES)
-	for T in $(TEST_BINARIES); do ./$$T; done
+	#for T in $(TEST_BINARIES); do $(PYTHON) $$T; done
+	python -m unittest *.py
 
 checkstyle:
-	python3 ../cpplint.py --repository=. *.h *.cpp
+	$(CHECKSTYLE) *.py
 
 clean:
-	rm -f *.o
-	rm -f $(MAIN_BINARIES)
-	rm -f $(TEST_BINARIES)
+	rm -f *.pyc
 
-%Main: %Main.o $(OBJECTS)
-	$(CXX) -o $@ $^ $(LIBRARIES) -lncurses
-
-%Test: %Test.o $(OBJECTS)
-	$(CXX) -o $@ $^ $(LIBRARIES) -lgtest -lgtest_main -lpthread -lncurses
-
-%.o: %.cpp $(HEADERS)
-	$(CXX) -c $<
+run:
+	python travianBot.py
