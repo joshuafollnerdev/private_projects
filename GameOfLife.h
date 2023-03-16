@@ -1,7 +1,6 @@
 // Copyright 2018, Joshua Follner
 // Author: Joshua Follner <joshua.follner@gmx.de>
 //
-// Used code from Musterloesung.
 
 #ifndef GAMEOFLIFE_H_
 #define GAMEOFLIFE_H_
